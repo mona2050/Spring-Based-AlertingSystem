@@ -1,4 +1,4 @@
-package com.philips.casestudy2.phase1.Springalertingsystem;
+package com.philips.casestudy2.springalertingsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
