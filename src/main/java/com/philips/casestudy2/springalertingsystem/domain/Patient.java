@@ -5,27 +5,23 @@ package com.philips.casestudy2.springalertingsystem.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Patient {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
   String id;
   String name;
-  //int age;
+  int age;
   Gender gender;
   String contact;
 
 
-  //@OneToOne(cascade = CascadeType.ALL)
-  // @JsonIgnore
-  //@JoinColumn(name="bedid")
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name="bedid")
   Icu icu;
   public Patient() {
 
@@ -34,15 +30,29 @@ public class Patient {
 
 
 
-  public Patient(String name, Gender gender, String contact) {
+  public Patient(String id,String name, Gender gender, String contact,int age) {
     super();
+    this.id=id;
     this.name = name;
-    //this.age = age;
+    this.age = age;
     this.gender = gender;
     this.contact = contact;
   }
 
 
+
+
+
+
+  public Patient(String id, String name, int age, Gender gender, String contact, Icu icu) {
+    super();
+    this.id = id;
+    this.name = name;
+    this.age = age;
+    this.gender = gender;
+    this.contact = contact;
+    this.icu = icu;
+  }
 
 
 
@@ -95,11 +105,30 @@ public class Patient {
     this.icu = icu;
   }
 
+
+  public int getAge() {
+    return age;
+  }
+
+
+
+
+  public void setAge(int age) {
+    this.age = age;
+  }
+
+
+
+
   @Override
   public String toString() {
-    return "Patient [id=" + id + ", name=" + name + ", gender=" + gender
-        + ", contact=" + contact + "]";
+    return "Patient [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender
+        + ", contact=" + contact + ", icu=" + icu.getOccupancy() + "]";
   }
+
+
+
+
 
 
 }

@@ -21,6 +21,7 @@ public class PatientDAOImpl implements PatientDAO {
     final Icu bed = em.find(Icu.class, id);
     patient.setIcu(bed);
     em.persist(patient);
+    bed.setOccupancy(1);
     return patient;
   }
 

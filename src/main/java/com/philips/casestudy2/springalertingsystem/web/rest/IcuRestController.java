@@ -11,37 +11,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.philips.casestudy2.springalertingsystem.domain.Patient;
-import com.philips.casestudy2.springalertingsystem.service.PatientService;
+import com.philips.casestudy2.springalertingsystem.domain.Icu;
+import com.philips.casestudy2.springalertingsystem.service.IcuService;
+
 @Controller
-public class PatientRestController {
+public class IcuRestController {
 
-
-  PatientService ps;
-
+  IcuService is;
 
   @Autowired
-  public void setPs(PatientService ps) {
-    this.ps = ps;
+  public void setIs(IcuService is) {
+    this.is = is;
   }
 
-
-  @PostMapping(value="/api/addpatient")
-  public ResponseEntity<Patient> addingPatient(@RequestBody Patient patient) {
+  @PostMapping(value="/api/addbed")
+  public ResponseEntity<Icu> addingBed(@RequestBody Icu bed) {
 
     try {
-
-      final int id = patient.getIcu().getBedid();
-      final String id_ = ps.addNewPatient(id, patient);
+      final int id = is.addNewBed(bed);
       final HttpHeaders headers = new HttpHeaders();
-      headers.setLocation(URI.create("/api/addpatient/"+id_));
+      headers.setLocation(URI.create("/api/addbed/"+id));
 
       return new ResponseEntity<>(headers,HttpStatus.CREATED);
     }catch(final IllegalArgumentException e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
   }
-
-
 
 }

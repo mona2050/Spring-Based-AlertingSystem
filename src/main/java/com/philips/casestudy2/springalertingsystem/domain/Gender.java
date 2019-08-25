@@ -5,6 +5,9 @@ package com.philips.casestudy2.springalertingsystem.domain;
 
 public enum Gender {
   MALE,
-  FEMALE
+  FEMALE;
 
+  public String getGender() {
+    return this.name();
+  }
 }
