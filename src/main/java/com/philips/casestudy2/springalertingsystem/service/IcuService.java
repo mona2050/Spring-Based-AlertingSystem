@@ -5,6 +5,6 @@ import com.philips.casestudy2.springalertingsystem.domain.Icu;
 
 public interface IcuService {
 
-  int addNewBed(Icu tobesaved);
+  int addNewBed(Icu toBeSaved);
 
 }
