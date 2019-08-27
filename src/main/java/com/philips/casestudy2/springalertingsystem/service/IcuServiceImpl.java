@@ -21,9 +21,9 @@ public class IcuServiceImpl implements IcuService {
 
 
   @Override
-  public int addNewBed(Icu tobesaved)
+  public int addNewBed(Icu toBeSaved)
   {
-    final Icu saved = ida.save(tobesaved);
+    final Icu saved = ida.save(toBeSaved);
     return saved.getBedid();
   }
 

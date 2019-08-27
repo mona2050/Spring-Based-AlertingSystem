@@ -10,7 +10,7 @@ import com.philips.casestudy2.springalertingsystem.domain.Patient;
 
 public interface IcuService {
 
-  int addNewBed(Icu tobesaved);
+  int addNewBed(Icu toBeSaved);
 
   List<Icu> findAll();
 
