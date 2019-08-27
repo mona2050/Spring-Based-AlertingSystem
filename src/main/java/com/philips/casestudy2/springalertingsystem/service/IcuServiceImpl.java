@@ -3,10 +3,12 @@
  */
 package com.philips.casestudy2.springalertingsystem.service;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.philips.casestudy2.springalertingsystem.dal.IcuDAO;
 import com.philips.casestudy2.springalertingsystem.domain.Icu;
+import com.philips.casestudy2.springalertingsystem.domain.Patient;
 @Service
 public class IcuServiceImpl implements IcuService {
 
@@ -23,6 +25,36 @@ public class IcuServiceImpl implements IcuService {
   {
     final Icu saved = ida.save(tobesaved);
     return saved.getBedid();
+  }
+
+
+  @Override
+  public List<Icu> findAll() {
+    return ida.findAll();
+  }
+
+
+  @Override
+  public Icu findBedById(int bedid) {
+    return ida.findById(bedid);
+  }
+
+
+  @Override
+  public Patient findPatientByBedId(int bedid) {
+    return ida.findPatientByBedId(bedid);
+  }
+
+
+  @Override
+  public List<Icu> findVacantBeds() {
+    return ida.findVacantBeds();
+  }
+
+
+  @Override
+  public List<Icu> findOccupiedBeds() {
+    return ida.findOccupiedBeds();
   }
 
 }

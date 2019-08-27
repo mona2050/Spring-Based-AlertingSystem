@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Icu {
@@ -18,6 +19,7 @@ public class Icu {
   int occupancy;
 
   @OneToOne(mappedBy = "icu")
+  @JsonIgnore
   Patient patient;
 
   public Icu() {

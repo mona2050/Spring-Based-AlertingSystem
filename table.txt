@@ -1,0 +1,2 @@
+use db;
+create table xyz(a number(6), b varchar2(20));
