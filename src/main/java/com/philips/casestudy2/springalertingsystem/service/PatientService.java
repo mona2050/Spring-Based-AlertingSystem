@@ -3,11 +3,23 @@
  */
 package com.philips.casestudy2.springalertingsystem.service;
 
+import java.util.List;
 import com.philips.casestudy2.springalertingsystem.domain.Patient;
 
 
 public interface PatientService {
 
   String addNewPatient(int id, Patient patient);
+
+  List<Patient> findAll();
+
+  Patient findById(String id);
+
+  void deleteById(String id);
+
+
+
+
+
 
 }
