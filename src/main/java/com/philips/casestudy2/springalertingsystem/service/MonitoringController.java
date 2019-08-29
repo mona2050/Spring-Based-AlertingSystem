@@ -3,48 +3,76 @@
  */
 package com.philips.casestudy2.springalertingsystem.service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class MonitoringController implements Runnable {
+@Controller
+public class MonitoringController{
+
+  @Autowired
+  static VitalCheck vitalCheckService;
+
+  @Autowired
+  static VitalValidationForErrors vitalValidationService;
+
+  @Autowired
+  static PatientMonitorSimulator patientSimulatorService;
+
+  @Autowired
+  static AlertRaising alertRaisingService;
 
 
-  VitalCheckImpl vitalCheckService;
-
-
-  static BufferedReader in ;
-  static int quit=0;
-  static PatientIdGeneratingModule p= new PatientIdGeneratingModule();
-  public static String patientId= p.getAlphaNumericString();
-
-  @Override
-  public void run()
-  {
-    String msg = null;
-    while(true)
-    {
-      try{
-        msg=in.readLine();
-      }catch(final Exception e){}
-
-      if(msg.equalsIgnoreCase("Q")) {quit=1;break;}}
+  public void setVitalCheckService(VitalCheck vitalCheckService) {
+    this.vitalCheckService = vitalCheckService;
   }
 
 
-  //@RequestMapping(value = "/startMonitoring", method = RequestMethod.GET)
-  public static void controllerFunction() {
+  public void setVitalValidationService(VitalValidationForErrors vitalValidationService) {
+    this.vitalValidationService = vitalValidationService;
+  }
 
-    final InputGeneratingModule ig = new InputGeneratingModule();
-    final AlertRaisingModule ar = new AlertRaisingModule();
-    final VitalValidationForErrors vm = new VitalValidationForErrorsImpl();
-    final VitalCheck vc = new VitalCheckImpl();
 
-    final Sample[] sample = ig.getDetails(patientId);
+  public void setPatientSimulatorService(PatientMonitorSimulator patientSimulatorService) {
+    this.patientSimulatorService = patientSimulatorService;
+  }
+
+
+  public void setAlertRaisingService(AlertRaising alertRaisingService) {
+    this.alertRaisingService = alertRaisingService;
+  }
+
+
+
+  //  static BufferedReader in ;
+  //  static int quit=0;
+  //  static PatientIdGeneratingModule p= new PatientIdGeneratingModule();
+  //  public static String patientId= p.getAlphaNumericString();
+  //
+  //  @Override
+  //  public void run()
+  //  {
+  //    String msg = null;
+  //    while(true)
+  //    {
+  //      try{
+  //        msg=in.readLine();
+  //      }catch(final Exception e){}
+  //
+  //      if(msg.equalsIgnoreCase("Q")) {quit=1;break;}}
+  //  }
+
+
+  @RequestMapping(value = "/startMonitoring/{id}", method = RequestMethod.GET)
+  public static void startPatientMonitoring(@PathVariable("id") String patientId) {
+    final Sample[] sample = patientSimulatorService.getDetails(patientId);
 
     if(sample !=null)
     {
 
-      for(int i=0;i<1;i++)
+      for(int i=0;i<sample.length;i++)
       {
         System.out.println("PatientId = " +sample[i].patientId);
         System.out.println("OxygenLevel = "+sample[i].oxygenLevel);
@@ -52,14 +80,14 @@ public class MonitoringController implements Runnable {
         System.out.println("Temperature = "+sample[i].temperature);
       }
 
-      if(vm.validateDetails(sample)) {
-        ar.alertingFunc(1);
+      if(vitalValidationService.validateVitalsData(sample)) {
+        alertRaisingService.alertingFunc(1);
       } else
       {
-        if(vc.checkAllVitals(sample)) {
-          ar.alertingFunc(1);
+        if(vitalCheckService.checkAllVitals(sample)) {
+          alertRaisingService.alertingFunc(1);
         } else {
-          ar.alertingFunc(0);
+          alertRaisingService.alertingFunc(0);
         }
 
       }
@@ -70,23 +98,24 @@ public class MonitoringController implements Runnable {
   }
 
 
-  public static void main(String args[]) throws Exception{
+  //  public static void main(String args[]) throws Exception{
+  //
+  //    in=new BufferedReader(new InputStreamReader(System.in));
+  //
+  //    final Thread t=new Thread(new MonitoringController());
+  //    t.start();
+  //
+  //    System.out.println("PRESS Q THEN ENTER to terminate");
+  //    while(true)
+  //    {
+  //      if(quit==1) {
+  //        break;
+  //      }
+  //      startPatientMonitoring();
+  //      System.out.println("********************************************");
+  //      t.sleep(1000);
+  //
+  //    }
+  //  }
 
-    in=new BufferedReader(new InputStreamReader(System.in));
-
-    final Thread t=new Thread(new MonitoringController());
-    t.start();
-
-    System.out.println("PRESS Q THEN ENTER to terminate");
-    while(true)
-    {
-      if(quit==1) {
-        break;
-      }
-      controllerFunction();
-      System.out.println("********************************************");
-      t.sleep(1000);
-
-    }
-  }
 }
