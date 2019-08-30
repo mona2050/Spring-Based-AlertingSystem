@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class AlertRaisingImpl implements AlertRaising {
 
   @Override
-  public void alertingFunc(int alertStatus){
+  public void alertingNursingStation(int alertStatus){
 
     if(alertStatus == 1) {
       System.out.println("ALERT !!!!!");

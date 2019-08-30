@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class TestTemprature {
-  VitalCheck test ;
+  VitalCheckImpl test ;
 
   @Test
   public void testTempratureNormal1() {

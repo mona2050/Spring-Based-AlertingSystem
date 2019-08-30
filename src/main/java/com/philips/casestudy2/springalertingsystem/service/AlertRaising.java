@@ -7,5 +7,5 @@ package com.philips.casestudy2.springalertingsystem.service;
 
 public interface AlertRaising {
 
-  void alertingFunc(int alertStatus);
+  void alertingNursingStation(int alertStatus);
 }

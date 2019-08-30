@@ -81,13 +81,13 @@ public class MonitoringController{
       }
 
       if(vitalValidationService.validateVitalsData(sample)) {
-        alertRaisingService.alertingFunc(1);
+        alertRaisingService.alertingNursingStation(1);
       } else
       {
         if(vitalCheckService.checkAllVitals(sample)) {
-          alertRaisingService.alertingFunc(1);
+          alertRaisingService.alertingNursingStation(1);
         } else {
-          alertRaisingService.alertingFunc(0);
+          alertRaisingService.alertingNursingStation(0);
         }
 
       }

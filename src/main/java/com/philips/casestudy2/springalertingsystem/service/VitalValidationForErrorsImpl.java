@@ -32,13 +32,13 @@ public class VitalValidationForErrorsImpl implements VitalValidationForErrors  {
     if(patientId == null){
       flag = true;
       System.out.println("INVALID PATIENTID");}
-    else if(checkParams(spo2_)==true){
+    else if(checkLessThanZeroValue(spo2_)==true){
       flag=true;
       System.out.println("INVALID OXYGEN LEVELS");}
-    else if(checkParams(pulseRate)==true){
+    else if(checkLessThanZeroValue(pulseRate)==true){
       flag=true;
       System.out.println("INVALID HEART RATE");}
-    else if(checkParams(temperature)==true){
+    else if(checkLessThanZeroValue(temperature)==true){
       flag=true;
       System.out.println("INVALID TEMPERATURE");}
     else if(checkSPO2(spo2_) == false){
@@ -61,7 +61,7 @@ public class VitalValidationForErrorsImpl implements VitalValidationForErrors  {
 
 
   // Method1
-  public static boolean checkParams(double x)
+  public static boolean checkLessThanZeroValue(double x)
   {
     if(x<=0) {
       return true;
