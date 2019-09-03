@@ -47,18 +47,12 @@ public class TestTemprature {
 
   @Test
   public void testTempratureLow3() {
-
-
-
     final int result = test.temperatureCheck(93.01);
     assertEquals(1,result);
   }
 
   @Test
   public void testTempratureLow4() {
-
-
-
     final int result = test.temperatureCheck(96.98);
     assertEquals(1,result);
   }
@@ -74,45 +68,30 @@ public class TestTemprature {
 
   @Test
   public void testTempratureHigh1() {
-
-
-
     final int result = test.temperatureCheck(99.01);
     assertEquals(1,result);
   }
 
   @Test
   public void testTempratureHigh2() {
-
-
-
     final int result = test.temperatureCheck(99.02);
     assertEquals(1,result);
   }
 
   @Test
   public void testTempratureHigh3() {
-
-
-
     final int result = test.temperatureCheck(107.98);
     assertEquals(1,result);
   }
 
   @Test
   public void testTempratureHigh4() {
-
-
-
     final int result = test.temperatureCheck(107.99);
     assertEquals(1,result);
   }
 
   @Test
   public void testTempratureHigh5() {
-
-
-
     final int result = test.temperatureCheck(108.00);
     assertEquals(1,result);
   }
