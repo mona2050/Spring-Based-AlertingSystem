@@ -13,6 +13,7 @@ public class VitalValidationServiceForErrorsImpl implements VitalValidationServi
   @Override
   public String validateVitalsData(PatientVitals[] sample) {
 
+
     String patientId = null;
     String spo2 = null;
     String pulserate = null;
@@ -34,11 +35,11 @@ public class VitalValidationServiceForErrorsImpl implements VitalValidationServi
 
     if(patientId == null) {
       cause="INVALID PATIENTID";
-    } else if(checkParams(spo2_)==true) {
+    } else if(checkLessThanZeroValue(spo2_)==true) {
       cause="INVALID OXYGEN LEVELS";
-    } else if(checkParams(pulseRate)==true) {
+    } else if(checkLessThanZeroValue(pulseRate)==true) {
       cause="INVALID HEART RATE";
-    } else if(checkParams(temperature)==true) {
+    } else if(checkLessThanZeroValue(temperature)==true) {
       cause="INVALID TEMPERATURE";
     } else if(checkSPO2(spo2_) == false) {
       cause="OXYGEN LEVEL IS OUT OF RANGE";
@@ -59,7 +60,7 @@ public class VitalValidationServiceForErrorsImpl implements VitalValidationServi
 
 
   // Method1
-  public static boolean checkParams(double x)
+  public static boolean checkLessThanZeroValue(double x)
   {
     if(x<=0) {
       return true;
