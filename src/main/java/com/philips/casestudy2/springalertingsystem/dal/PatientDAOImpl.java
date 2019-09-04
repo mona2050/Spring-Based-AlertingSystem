@@ -5,6 +5,7 @@ package com.philips.casestudy2.springalertingsystem.dal;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +18,20 @@ public class PatientDAOImpl implements PatientDAO {
   EntityManager em;
 
   @Override
-  public Patient save(int id, Patient patient) {
+  public String save(int id, Patient patient) {
 
     final Icu bed = em.find(Icu.class, id);
-    patient.setIcu(bed);
-    em.persist(patient);
-    bed.setOccupancy(1);
-    return patient;
+
+    if(bed.getOccupancy()==0) {
+      patient.setIcu(bed);
+      em.persist(patient);
+      bed.setOccupancy(1);
+      return patient.getId();} else {
+        return null;
+      }
+
   }
+
 
   @Override
   public List<Patient> findAll() {
@@ -49,7 +56,15 @@ public class PatientDAOImpl implements PatientDAO {
 
   }
 
+  @Override
+  public int findBedOfPatient(String id) {
+
+    try {
+      return (int) em.createQuery("select p.icu.bedid from Patient p where p.id=:id").setParameter("id",id).getSingleResult();
+    }catch (final NoResultException e) {
+      return -1;
+    }
 
 
-
+  }
 }

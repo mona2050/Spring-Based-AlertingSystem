@@ -3,10 +3,8 @@
  */
 package com.philips.casestudy2.springalertingsystem.web.rest;
 
-import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.philips.casestudy2.springalertingsystem.domain.Patient;
+import com.philips.casestudy2.springalertingsystem.service.PatientIdSimulator;
 import com.philips.casestudy2.springalertingsystem.service.PatientService;
 @RestController
 public class PatientRestController {
@@ -23,64 +22,60 @@ public class PatientRestController {
 
   PatientService ps;
 
-
   @Autowired
-  public void setPs(PatientService ps) {
+  public PatientRestController(PatientService ps) {
     this.ps = ps;
   }
 
 
   @PostMapping(value="/api/addpatient")
-  public ResponseEntity<Patient> addingPatient(@RequestBody Patient patient) {
-
+  public ResponseEntity<String> addingPatient(@RequestBody Patient patient) {
+    String message;
     try {
 
-      final int id = patient.getIcu().getBedid();
-      final String charString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      final String numericString = "0123456789";
-      final StringBuilder sb = new StringBuilder();
-
-
-      for (int i = 0; i < 5; i++) {
-
-        final int index = (int)(charString.length() * Math.random());
-        sb.append(charString.charAt(index));
-      }
-      for (int i = 0; i < 3; i++) {
-        final int index = (int)(numericString.length() * Math.random());
-        sb.append(numericString.charAt(index));
-      }
-
-      final String patientId = sb.toString();
+      final com.philips.casestudy2.springalertingsystem.service.PatientIdSimulator pi = new PatientIdSimulator();
+      final String patientId = pi.patientIdGenerator();
       patient.setId(patientId);
-      final String id_ = ps.addNewPatient(id, patient);
-      final HttpHeaders headers = new HttpHeaders();
-      headers.setLocation(URI.create("/api/addpatient/"+id_));
 
-      return new ResponseEntity<>(headers,HttpStatus.CREATED);
-    }catch(final IllegalArgumentException e) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      final int bedId = patient.getIcu().getBedid();
+      final String addedPatientId = ps.addNewPatient(bedId, patient);
+
+      if(addedPatientId!=null) {
+        message = "Patient successfully created!!!";
+        return new ResponseEntity<>(message,HttpStatus.OK);
+      }
+      else
+      {
+        message = "Patient not created!!!";
+        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+      }
+    }catch (final IllegalArgumentException e) {
+      message = "Illegal Arguments";
+      return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
+
   }
 
-  @GetMapping(value="/api/findAllPatients")
-  public List<Patient> getAllPatients(){
-    return ps.findAll();
+  @GetMapping(value="/api/getAllPatients")
+  public ResponseEntity<List<Patient>> getAllPatients(){
+    final List<Patient> listOfPatients =  ps.getAllPatients();
+    System.out.println("Getting data from database"+listOfPatients);
+    return new ResponseEntity<>(listOfPatients,HttpStatus.OK);
   }
 
   @GetMapping(value="/api/findById/{id}")
   public ResponseEntity<Patient> getPatientById(@PathVariable("id")String id){
-    final Patient p = ps.findById(id);
+    final Patient p = ps.findPatientById(id);
     if(p!=null) {
       return new ResponseEntity<>(p,HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
   @DeleteMapping(value="/api/dischargePatient/{id}")
   public ResponseEntity<Patient> dischargePatient(@PathVariable("id")String id){
-    final Patient p = ps.findById(id);
+    final Patient p = ps.findPatientById(id);
     if(p!=null) {
       ps.deleteById(id);
       return new ResponseEntity<>(HttpStatus.OK);} else {
@@ -88,4 +83,8 @@ public class PatientRestController {
       }
   }
 
+  @GetMapping(value="/api/findBedOfPatient/{id}")
+  public int getBedOfPatient(@PathVariable("id")String id){
+    return ps.findBedOfPatient(id);
+  }
 }

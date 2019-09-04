@@ -1,24 +1,26 @@
 /*
  * The copyright of this file belongs to Koninklijke Philips N.V., 2019.
  */
+
 package com.philips.casestudy2.springalertingsystem.service;
 
 import org.springframework.stereotype.Service;
+import com.philips.casestudy2.springalertingsystem.domain.PatientVitals;
 
 @Service
-public class VitalValidationForErrorsImpl implements VitalValidationForErrors  {
+public class VitalValidationServiceForErrorsImpl implements VitalValidationServiceForErrors  {
 
   @Override
-  public boolean validateVitalsData(Sample[] sample) {
+  public String validateVitalsData(PatientVitals[] sample) {
 
     String patientId = null;
     String spo2 = null;
     String pulserate = null;
     String temp = null;
-    boolean flag = false;
 
 
-    for (final Sample element : sample) {
+
+    for (final PatientVitals element : sample) {
       patientId= element.patientId;
       spo2 = element.oxygenLevel;
       pulserate = element.pulseRate;
@@ -28,33 +30,29 @@ public class VitalValidationForErrorsImpl implements VitalValidationForErrors  {
     final int spo2_=Integer.parseInt(spo2);
     final int pulseRate = Integer.parseInt(pulserate);
     final double temperature = Double.parseDouble(temp);
+    String cause=null;
 
-    if(patientId == null){
-      flag = true;
-      System.out.println("INVALID PATIENTID");}
-    else if(checkParams(spo2_)==true){
-      flag=true;
-      System.out.println("INVALID OXYGEN LEVELS");}
-    else if(checkParams(pulseRate)==true){
-      flag=true;
-      System.out.println("INVALID HEART RATE");}
-    else if(checkParams(temperature)==true){
-      flag=true;
-      System.out.println("INVALID TEMPERATURE");}
-    else if(checkSPO2(spo2_) == false){
-      flag=true;
-      System.out.println("OXYGEN LEVEL IS OUT OF RANGE");}
-    else if(checkPulseRate(pulseRate)==false){
-      flag=true;
-      System.out.println("PULSERATE IS OUT OF RANGE");}
-    else if(checkTemp(temperature) == false){
-      flag=true;
-      System.out.println("TEMPERATURE IS OUT OF RANGE");} else {
-        flag = false;
-      }
+    if(patientId == null) {
+      cause="INVALID PATIENTID";
+    } else if(checkParams(spo2_)==true) {
+      cause="INVALID OXYGEN LEVELS";
+    } else if(checkParams(pulseRate)==true) {
+      cause="INVALID HEART RATE";
+    } else if(checkParams(temperature)==true) {
+      cause="INVALID TEMPERATURE";
+    } else if(checkSPO2(spo2_) == false) {
+      cause="OXYGEN LEVEL IS OUT OF RANGE";
+    } else if(checkPulseRate(pulseRate)==false) {
+      cause="PULSERATE IS OUT OF RANGE";
+    } else if(checkTemp(temperature) == false) {
+      cause="TEMPERATURE IS OUT OF RANGE";
+    } else {
+      cause=null;
+    }
 
 
-    return flag;
+
+    return cause;
 
   }
 

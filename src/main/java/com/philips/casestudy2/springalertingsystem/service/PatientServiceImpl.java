@@ -21,21 +21,21 @@ public class PatientServiceImpl implements PatientService {
 
 
   @Override
-  public String addNewPatient(int id, Patient patient) {
-    final Patient saved = pd.save(id, patient);
-    return saved.getId();
+  public  String  addNewPatient(int id, Patient patient) {
+    final String savedId = pd.save(id, patient);
+    return savedId;
 
   }
 
 
   @Override
-  public List<Patient> findAll() {
+  public List<Patient> getAllPatients() {
     return pd.findAll();
   }
 
 
   @Override
-  public Patient findById(String id) {
+  public Patient findPatientById(String id) {
     return pd.findById(id);
   }
 
@@ -43,6 +43,12 @@ public class PatientServiceImpl implements PatientService {
   @Override
   public void deleteById(String id) {
     pd.deleteById(id);
+  }
+
+
+  @Override
+  public int findBedOfPatient(String id) {
+    return pd.findBedOfPatient(id);
   }
 
 

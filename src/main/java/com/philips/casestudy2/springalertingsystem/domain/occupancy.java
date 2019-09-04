@@ -3,12 +3,10 @@
  */
 package com.philips.casestudy2.springalertingsystem.domain;
 
-public enum Gender {
-  MALE,
-  FEMALE;
+public enum occupancy {
 
 
-  public String getGender() {
-    return this.name();
-  }
+
+
+
 }

@@ -3,9 +3,9 @@
  */
 package com.philips.casestudy2.springalertingsystem.service;
 
+import com.philips.casestudy2.springalertingsystem.service.AlertRaisingServiceImpl.Result;
 
+public interface AlertRaisingService {
 
-public interface AlertRaising {
-
-  void alertingFunc(int alertStatus);
+  Result alertingFunc(int alertStatus);
 }

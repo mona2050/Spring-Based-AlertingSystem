@@ -9,13 +9,15 @@ import com.philips.casestudy2.springalertingsystem.domain.Patient;
 
 public interface PatientDAO {
 
-  Patient save(int id, Patient patient);
+  String save(int id, Patient patient);
 
   List<Patient> findAll();
 
   Patient findById(String id);
 
   void deleteById(String id);
+
+  int findBedOfPatient(String id);
 
 
 

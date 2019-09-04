@@ -27,23 +27,9 @@ public class Patient {
 
   }
 
-  public Patient(String id,String name, Gender gender, String contact,int age) {
+
+  public Patient(String name, int age, Gender gender, String contact, Icu icu) {
     super();
-    this.id=id;
-    this.name = name;
-    this.age = age;
-    this.gender = gender;
-    this.contact = contact;
-  }
-
-
-
-
-
-
-  public Patient(String id, String name, int age, Gender gender, String contact, Icu icu) {
-    super();
-    this.id = id;
     this.name = name;
     this.age = age;
     this.gender = gender;

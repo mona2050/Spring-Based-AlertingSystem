@@ -4,14 +4,15 @@
 package com.philips.casestudy2.springalertingsystem.service;
 
 import org.springframework.stereotype.Service;
+import com.philips.casestudy2.springalertingsystem.domain.PatientVitals;
 
 @Service
-public class PatientMonitorSimulatorImpl implements PatientMonitorSimulator {
+public class PatientMonitorSimulatorServiceImpl implements PatientMonitorSimulatorService {
   @Override
-  public Sample[] getDetails(String patientId)
+  public PatientVitals[] getDetails(String patientId)
   {
-    Sample[] arr;
-    arr = new Sample[1];
+    PatientVitals[] arr;
+    arr = new PatientVitals[1];
 
     final RandomValuesGeneratingModule r= new RandomValuesGeneratingModule();
     final int spo2=(int)r.generateFun(50, 100);
@@ -21,7 +22,7 @@ public class PatientMonitorSimulatorImpl implements PatientMonitorSimulator {
     final String spo2_ = Integer.toString(spo2);
     final String pulseRate = Integer.toString(hr);
     final String temperature = Double.toString(temp);
-    arr[0] = new Sample(patientId,spo2_,pulseRate,temperature);
+    arr[0] = new PatientVitals(patientId,spo2_,pulseRate,temperature);
     if(patientId!=null && spo2_!=null && pulseRate!=null && temperature!=null) {
       return arr;
     } else {

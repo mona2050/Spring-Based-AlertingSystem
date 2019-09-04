@@ -3,13 +3,16 @@
  */
 package com.philips.casestudy2.springalertingsystem.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
+import com.philips.casestudy2.springalertingsystem.domain.PatientVitals;
 
 @Service
-public class VitalCheckImpl implements VitalCheck {
+public class VitalCheckServiceImpl implements VitalCheckService {
 
   @Override
-  public boolean checkAllVitals(Sample[] sample) {
+  public List<String> checkAllVitals(PatientVitals[] sample) {
     int result1=0;
     int result2=0;
     int result3=0;
@@ -25,25 +28,26 @@ public class VitalCheckImpl implements VitalCheck {
     final int pr_ = Integer.parseInt(pr);
     final double tc_ = Double.parseDouble(tc);
 
+    final List<String> causes=new ArrayList<>();
     result1 = pulseRateCheck(pr_);
     result2 = temperatureCheck(tc_);
     result3 = oxygenCheck(oc_);
     if(result1==1) {
-      System.out.println("CRITICAL PULSE RATE!!!!");
+      causes.add("CRITICAL PULSE RATE!!!!");
     }
 
     if(result2==1) {
-      System.out.println("CRITICAL TEMPERTAURE!!!!");
+      causes.add("CRITICAL TEMPERTAURE!!!!");
     }
 
     if(result3==1) {
-      System.out.println("CRITICAL OXYGEN LEVELS!!!!");
+      causes.add("CRITICAL OXYGEN LEVELS!!!!");
     }
 
     if(result1==1 || result2==1 || result3==1) {
-      return true;
+      return causes;
     } else {
-      return false;
+      return null;
     }
 
   }

@@ -11,11 +11,14 @@ public interface PatientService {
 
   String addNewPatient(int id, Patient patient);
 
-  List<Patient> findAll();
-
-  Patient findById(String id);
-
   void deleteById(String id);
+
+  int findBedOfPatient(String id);
+
+  List<Patient> getAllPatients();
+
+
+  Patient findPatientById(String id);
 
 
 
