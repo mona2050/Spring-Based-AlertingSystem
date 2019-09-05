@@ -8,16 +8,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
 @Entity
 public class Patient {
 
   @Id
   String id;
   String name;
-  int age;
   Gender gender;
   String contact;
+  String adhaarno;
+  //  @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+  //  Date dateOfBirth;
 
 
   @OneToOne(cascade = CascadeType.PERSIST)
@@ -28,12 +29,16 @@ public class Patient {
   }
 
 
-  public Patient(String name, int age, Gender gender, String contact, Icu icu) {
+
+
+  public Patient(String name, Gender gender, String contact, String adhaarno,
+      Icu icu) {
     super();
     this.name = name;
-    this.age = age;
     this.gender = gender;
     this.contact = contact;
+    this.adhaarno = adhaarno;
+    // this.dateOfBirth = dateOfBirth;
     this.icu = icu;
   }
 
@@ -82,26 +87,29 @@ public class Patient {
     this.icu = icu;
   }
 
+  public String getAdhaarno() {
+    return adhaarno;
+  }
 
-  public int getAge() {
-    return age;
+  public void setAdhaarno(String adhaarno) {
+    this.adhaarno = adhaarno;
   }
 
 
-
-
-  public void setAge(int age) {
-    this.age = age;
-  }
-
-
-
+  //  public Date getDateOfBirth() {
+  //    return dateOfBirth;
+  //  }
+  //
+  //  public void setDateOfBirth(Date dateOfBirth) {
+  //    this.dateOfBirth = dateOfBirth;
+  //  }
 
   @Override
   public String toString() {
-    return "Patient [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender
-        + ", contact=" + contact + ", icu=" + icu.getBedid()+ "]";
+    return "Patient [id=" + id + ", name=" + name + ", gender=" + gender + ", contact=" + contact
+        + ", adhaarno=" + adhaarno + ", icu=" + icu + "]";
   }
+
 
 
 

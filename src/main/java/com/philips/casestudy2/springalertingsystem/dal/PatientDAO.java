@@ -19,6 +19,10 @@ public interface PatientDAO {
 
   int findBedOfPatient(String id);
 
+  Patient checkPatientExistence(String adhaarno);
+
+
+
 
 
 

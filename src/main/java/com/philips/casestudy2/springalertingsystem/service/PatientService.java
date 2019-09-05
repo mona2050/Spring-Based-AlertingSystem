@@ -20,6 +20,8 @@ public interface PatientService {
 
   Patient findPatientById(String id);
 
+  Patient checkPatientExistence(String adhaarno);
+
 
 
 

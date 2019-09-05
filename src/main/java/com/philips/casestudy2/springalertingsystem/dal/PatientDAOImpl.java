@@ -14,6 +14,7 @@ import com.philips.casestudy2.springalertingsystem.domain.Patient;
 @Transactional
 @Repository
 public class PatientDAOImpl implements PatientDAO {
+
   @PersistenceContext
   EntityManager em;
 
@@ -21,15 +22,18 @@ public class PatientDAOImpl implements PatientDAO {
   public String save(int id, Patient patient) {
 
     final Icu bed = em.find(Icu.class, id);
-
-    if(bed.getOccupancy()==0) {
-      patient.setIcu(bed);
-      em.persist(patient);
-      bed.setOccupancy(1);
-      return patient.getId();} else {
-        return null;
-      }
-
+    final Patient p = checkPatientExistence(patient.getAdhaarno());
+    if(p==null) {
+      if(bed.getOccupancy()==0) {
+        patient.setIcu(bed);
+        em.persist(patient);
+        bed.setOccupancy(1);
+        return patient.getId();} else {
+          return "0";
+        }
+    } else {
+      return "1";
+    }
   }
 
 
@@ -66,5 +70,17 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
 
+  }
+
+
+  @Override
+  public Patient checkPatientExistence(String adhaarno) {
+    final Patient p = (Patient) em.createQuery("select p from Patient p where p.adhaarno=:adhaarno").setParameter("adhaarno", adhaarno).getSingleResult();
+
+    if(p!=null) {
+      return p;
+    } else {
+      return null;
+    }
   }
 }

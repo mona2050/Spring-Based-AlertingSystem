@@ -13,16 +13,17 @@ public class VitalCheckServiceImpl implements VitalCheckService {
 
   @Override
   public List<String> checkAllVitals(PatientVitals[] sample) {
+
     int result1=0;
     int result2=0;
     int result3=0;
     String pr = null;
     String tc = null;
     String oc = null;
-    for(int i=0;i<1;i++) {
-      pr = sample[i].pulseRate;
-      tc = sample[i].temperature;
-      oc = sample[i].oxygenLevel;
+    for (final PatientVitals element : sample) {
+      pr = element.pulseRate;
+      tc = element.temperature;
+      oc = element.oxygenLevel;
     }
     final int oc_=Integer.parseInt(oc);
     final int pr_ = Integer.parseInt(pr);

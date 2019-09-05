@@ -21,10 +21,12 @@ import com.philips.casestudy2.springalertingsystem.service.VitalValidationServic
 public class MonitoringController{
 
 
+
   static VitalCheckService vitalCheckService;
   static VitalValidationServiceForErrors vitalValidationService;
   static PatientMonitorSimulatorService patientSimulatorService;
   static AlertRaisingService alertRaisingService;
+
 
   @Autowired
   public void setVitalCheckService(VitalCheckService vitalCheckService) {
@@ -46,50 +48,53 @@ public class MonitoringController{
     this.alertRaisingService = alertRaisingService;
   }
 
-
   @GetMapping(value = "/startMonitoring/{id}")
   public ResponseEntity<List<String>> startPatientMonitoring(@PathVariable("id") String patientId)
   {
 
-    while(true) {
-      final PatientVitals[] sample = patientSimulatorService.getDetails(patientId);
 
-      final List<String> listOfVitals=new ArrayList<>();
 
+    final PatientVitals[] sample = patientSimulatorService.getDetails(patientId);
+
+    final List<String> listOfVitals=new ArrayList<>();
+
+
+    final String vitalValidationResult;
+    final List<String> vitalCheckResult;
+
+    if(sample !=null)
+    {
       for (final PatientVitals element : sample) {
         listOfVitals.add("PatientId="+element.patientId);
         listOfVitals.add("OxygenLevel="+element.oxygenLevel);
         listOfVitals.add("PulseRate="+element.pulseRate);
         listOfVitals.add("Temperature="+element.temperature);
       }
-      final String vitalValidationResult;
-      final List<String> vitalCheckResult;
+      vitalValidationResult=vitalValidationService.validateVitalsData(sample);
+      if(vitalValidationResult!=null) {
 
-      if(sample !=null)
 
+        listOfVitals.add(vitalValidationResult);
+        listOfVitals.add(alertRaisingService.alertingFunc(1).toString());
+
+      } else
       {
-        vitalValidationResult=vitalValidationService.validateVitalsData(sample);
-        if(vitalValidationResult!=null) {
-          listOfVitals.add(vitalValidationResult);
+        vitalCheckResult = vitalCheckService.checkAllVitals(sample);
+        if(vitalCheckResult!=null) {
+          listOfVitals.addAll(vitalCheckResult);
           listOfVitals.add(alertRaisingService.alertingFunc(1).toString());
-
-        } else
-        {
-          vitalCheckResult = vitalCheckService.checkAllVitals(sample);
-          if(vitalCheckResult!=null) {
-            listOfVitals.addAll(vitalCheckResult);
-            listOfVitals.add(alertRaisingService.alertingFunc(1).toString());
-          } else {
-            listOfVitals.add(alertRaisingService.alertingFunc(0).toString());
-          }
-
+        } else {
+          listOfVitals.add(alertRaisingService.alertingFunc(0).toString());
         }
-        return new ResponseEntity<>(listOfVitals,HttpStatus.OK);
-      } else {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-      }
 
+      }
+      return new ResponseEntity<>(listOfVitals,HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
   }
 
 }
+

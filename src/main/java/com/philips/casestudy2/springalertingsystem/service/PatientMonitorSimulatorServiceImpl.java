@@ -11,7 +11,11 @@ public class PatientMonitorSimulatorServiceImpl implements PatientMonitorSimulat
   @Override
   public PatientVitals[] getDetails(String patientId)
   {
+
+
+
     PatientVitals[] arr;
+
     arr = new PatientVitals[1];
 
     final RandomValuesGeneratingModule r= new RandomValuesGeneratingModule();

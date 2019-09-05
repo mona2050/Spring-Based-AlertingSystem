@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class TestPulseRate {
 
-  VitalCheckServiceImpl test;
+  VitalCheckServiceImpl test = new VitalCheckServiceImpl();
 
   @Test
   public void testPulseRateNormal1() {

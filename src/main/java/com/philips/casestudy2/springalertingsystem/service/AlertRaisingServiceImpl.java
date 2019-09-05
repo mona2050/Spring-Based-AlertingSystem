@@ -11,6 +11,8 @@ public class AlertRaisingServiceImpl implements AlertRaisingService {
   public enum Result{
     ALERT("ALERT"), NOALERT("NOALERT");
 
+
+
     String key;
 
     Result(String key) { this.key = key; }

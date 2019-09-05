@@ -22,6 +22,7 @@ public class Icu {
   @JsonIgnore
   Patient patient;
 
+
   public Icu() {
 
   }

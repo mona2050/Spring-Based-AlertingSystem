@@ -17,6 +17,7 @@ public class PatientServiceImpl implements PatientService {
   @Autowired
   public void setPd(PatientDAO pd) {
     this.pd = pd;
+
   }
 
 
@@ -28,15 +29,18 @@ public class PatientServiceImpl implements PatientService {
   }
 
 
+
   @Override
   public List<Patient> getAllPatients() {
     return pd.findAll();
+
   }
 
 
   @Override
   public Patient findPatientById(String id) {
     return pd.findById(id);
+
   }
 
 
@@ -52,8 +56,15 @@ public class PatientServiceImpl implements PatientService {
   }
 
 
-
-
-
-
+  @Override
+  public Patient checkPatientExistence(String adhaarno) {
+    final Patient p = pd.checkPatientExistence(adhaarno);
+    if(p!=null) {
+      return p;
+    } else {
+      return null;
+    }
+  }
 }
+
+

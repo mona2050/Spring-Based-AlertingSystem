@@ -3,7 +3,8 @@
  */
 package com.philips.casestudy2.springalertingsystem.service;
 
-public class PatientIdSimulator {
+public class PatientIdSimulatorService {
+
 
   public String patientIdGenerator() {
     final String charString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -22,6 +23,10 @@ public class PatientIdSimulator {
     }
 
     final String patientId = sb.toString();
-    return patientId;
+    if(patientId!=null) {
+      return patientId;
+    } else {
+      return null;
+    }
   }
 }
