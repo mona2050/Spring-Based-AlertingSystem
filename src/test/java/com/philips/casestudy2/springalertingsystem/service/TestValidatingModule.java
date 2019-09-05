@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class TestValidatingModule {
 
-  VitalValidationServiceForErrorsImpl ValidatingService;
+  VitalValidationServiceForErrorsImpl ValidatingService ;
 
   //  @Test
   //  public void testCheckparams()

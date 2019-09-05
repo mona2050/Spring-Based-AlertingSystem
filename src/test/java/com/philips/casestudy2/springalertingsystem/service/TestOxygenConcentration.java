@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class TestOxygenConcentration {
-  VitalCheckServiceImpl test;
+  VitalCheckServiceImpl test = new VitalCheckServiceImpl();
 
 
 
