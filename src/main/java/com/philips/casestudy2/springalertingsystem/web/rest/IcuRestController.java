@@ -29,7 +29,7 @@ public class IcuRestController {
   }
 
   @PostMapping(value="/api/addbed")
-  public ResponseEntity<Icu> addingBed(@RequestBody Icu bed) {
+  public ResponseEntity<Icu> addBed(@RequestBody Icu bed) {
 
     try {
       final int id = is.addNewBed(bed);
@@ -44,19 +44,22 @@ public class IcuRestController {
   }
 
   @GetMapping(value = "/api/findallbed")
-  public List<Icu> getAllBed(){
-    return is.findAll();
+  public ResponseEntity<List<Icu>> getAllBed(){
+
+    final List<Icu> res= is.findAllBed();
+    return new ResponseEntity<>(res,HttpStatus.OK);
   }
 
 
   @GetMapping(value = "/api/getBedById/{bedid}")
-  public ResponseEntity<Icu> getById(@PathVariable("bedid") int bedid){
-    final Icu res= is.findBedById(bedid);
+  public ResponseEntity<Icu> getBedById(@PathVariable("bedid") int bedid){
+    Icu res= is.findBedById(bedid);
     if(res!=null) {
       return new ResponseEntity<>(res,HttpStatus.OK);
     }
     else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      res=null;
+      return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
     }
   }
 
@@ -74,22 +77,12 @@ public class IcuRestController {
   @GetMapping(value = "/api/getVacantBeds")
   public ResponseEntity<List<Icu>> getVacantBeds(){
     final List<Icu> res= is.findVacantBeds();
-    if(res!=null) {
-      return new ResponseEntity<>(res,HttpStatus.OK);
-    }
-    else {
-      return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(res,HttpStatus.OK);
   }
 
   @GetMapping(value = "/api/getOccupiedBeds")
   public ResponseEntity<List<Icu>> getOccupiedBeds(){
     final List<Icu> res= is.findOccupiedBeds();
-    if(res!=null) {
-      return new ResponseEntity<>(res,HttpStatus.OK);
-    }
-    else {
-      return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(res,HttpStatus.OK);
   }
 }
