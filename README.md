@@ -6,6 +6,12 @@ The user of this tool is a nurse in the ICU. The patient’s vital signs are sen
 3. PatientVitals class consists of oxygenlevel, pulser rate, temperature along with the patient id.
 #### The service layer has following functionalities.
 1.The PatientMonitorSimulatorServiceImpl class generates the patient vitals.
-2. The VitalValidationServiceForErrorsImpl class checks the vitals of patients whether the values are valid or not. 
+
+2. The VitalValidationServiceForErrorsImpl class checks the vitals of patients whether the values are valid or not.
+
 3. The VitalCheckServiceImpl class checks whether the values are within the specified range and if not it sets the flag.
+
 4. The Alerting raising module raises an alert when the values are out of range.
+#### The restful controllers consists of
+1.IcuRestController has the api link for diffrenet functionalities of bed.
+2.PatientRestController contains api for patient related functions. 
