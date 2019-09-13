@@ -1,6 +1,6 @@
 # Spring-Based-AlertingSystem
 The user of this tool is a nurse in the ICU. The patient’s vital signs are sensed and formatted into a JSON-string by a patient-monitoring device. The formatted data keeps arriving periodically. When a parameter goes out-of-range, an alert is given on the console-output.
-##The domain layer of the API consists of following classes.
+## The domain layer of the API consists of following classes.
 1. Patient class consists of patient Id, name, gender, contact, aadhar no. The patient is associated with one ICU bed. 
 2. Icu class consists of bedid and occupancy. If the bed is occupied then occupancy is set to 1 and patient object is associated with the ICU bed.
 3. PatientVitals class consists of oxygenlevel, pulser rate, temperature along with the patient id.
