@@ -38,7 +38,6 @@ public class Patient {
     this.gender = gender;
     this.contact = contact;
     this.adhaarno = adhaarno;
-    // this.dateOfBirth = dateOfBirth;
     this.icu = icu;
   }
 
@@ -94,15 +93,6 @@ public class Patient {
   public void setAdhaarno(String adhaarno) {
     this.adhaarno = adhaarno;
   }
-
-
-  //  public Date getDateOfBirth() {
-  //    return dateOfBirth;
-  //  }
-  //
-  //  public void setDateOfBirth(Date dateOfBirth) {
-  //    this.dateOfBirth = dateOfBirth;
-  //  }
 
   @Override
   public String toString() {

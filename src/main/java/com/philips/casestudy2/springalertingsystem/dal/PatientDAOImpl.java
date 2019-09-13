@@ -21,6 +21,7 @@ public class PatientDAOImpl implements PatientDAO {
   @Override
   public String save(int id, Patient patient) {
 
+
     final Icu bed = em.find(Icu.class, id);
     final Patient p = checkPatientExistence(patient.getAdhaarno());
     if(p==null) {
@@ -37,9 +38,12 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
 
+
+
   @Override
   public List<Patient> findAll() {
 
+    @SuppressWarnings("unchecked")
     final List<Patient> p = em.createQuery("select p from Patient p").getResultList();
     return p;
   }

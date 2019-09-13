@@ -35,6 +35,7 @@ public class TestPatientServiceImpl {
 
     Mockito.when(mockDAO.findAll()).thenReturn(patients);
 
+
     service.setPd(mockDAO);
 
     final List<Patient> listOfPatients = service.getAllPatients();
@@ -43,7 +44,7 @@ public class TestPatientServiceImpl {
   }
 
   @Test
-  public void test_get_patientById_when() {
+  public void test_get_patientById() {
     final Icu i1 = new Icu(0);
     i1.setBedid(1);
     final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
@@ -125,7 +126,7 @@ public class TestPatientServiceImpl {
   }
 
   @Test
-  public void test_check_patient_existence() {
+  public void test_check_patient_existence_when_patient_exists() {
     final Icu i1 = new Icu(0);
     i1.setBedid(1);
     final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
@@ -139,6 +140,23 @@ public class TestPatientServiceImpl {
 
     final Patient p = service.checkPatientExistence("1234567891");
     assertEquals(p, p1);
+  }
+
+  @Test
+  public void test_check_patient_existence_when_patient_doesnot_exists() {
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
+
+    final PatientServiceImpl service = new PatientServiceImpl();
+    final PatientDAO mockDAO = Mockito.mock(PatientDAO.class);
+
+    Mockito.when(mockDAO.checkPatientExistence("1234567897")).thenReturn(null);
+    service.setPd(mockDAO);
+
+    final Patient p = service.checkPatientExistence("1234567897");
+    assertEquals(null,p);
   }
 
 }

@@ -3,6 +3,7 @@
  */
 package com.philips.casestudy2.springalertingsystem.controller;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class TestPatientRestController {
     if(response.getStatusCode() == HttpStatus.BAD_REQUEST) {
       assertEquals(response.getBody(),actual);
     }
+
 
   }
   @Test
@@ -81,7 +83,7 @@ public class TestPatientRestController {
     final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
 
     Mockito.when(service.addNewPatient(p1.getIcu().getBedid(), p1)).thenReturn(null);
-    final String actual ="Patient cannot be created!!!";
+    final String actual ="Patient cannot be null!!!";
     final ResponseEntity<String> response = prc.addingPatient(p1);
 
     if(response.getStatusCode() == HttpStatus.BAD_REQUEST) {
@@ -151,17 +153,16 @@ public class TestPatientRestController {
     final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
     p1.setId("A2345");
 
-    prc.setPs(service);
-    final Icu i2 = new Icu(0);
-    i1.setBedid(2);
-    final Patient p2= new Patient("mona",Gender.FEMALE,"6301340004","1234567895",i2);
+    i1.setBedid(1);
+    final Patient p2= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
 
     Mockito.when(service.addNewPatient(p2.getIcu().getBedid(), p2)).thenReturn("A2345");
     final String actual = "Patient successfully created!!!";
-    final ResponseEntity<String> response = prc.addingPatient(p1);
+    final ResponseEntity<String> response = prc.addingPatient(p2);
 
     if(response.getStatusCode() == HttpStatus.OK) {
       assertEquals(response.getBody(),actual);
+
     }
 
 
@@ -213,12 +214,12 @@ public class TestPatientRestController {
     p1.setId("A2345");
 
     Mockito.when(service.findPatientById("A2345")).thenReturn(p1);
-    final Patient actual = p1;
+
 
     final ResponseEntity<Patient> response = prc.getPatientById("A2345");
 
     if(response.getStatusCode()==HttpStatus.OK) {
-      assertEquals(response.getBody(),actual);
+      assertEquals(response.getBody(),p1);
     }
 
   }
@@ -291,26 +292,62 @@ public class TestPatientRestController {
 
   }
 
-  //  @Test
-  //  public void test_discharge_patient_when_patient_not_found() throws Exception{
-  //    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
-  //    final PatientRestController prc =  new PatientRestController();
-  //
-  //
-  //    prc.setPs(service);
-  //    final Icu i1 = new Icu(0);
-  //    i1.setBedid(1);
-  //    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
-  //    p1.setId("A2345");
-  //
-  //    Mockito.when(service.findPatientById("A2348")).thenReturn(null);
-  //    final String actual = "Patient deletion failed!!";
-  //    final ResponseEntity<String> response = prc.dischargePatient("A2348");
-  //
-  //    if(response.getStatusCode()==HttpStatus.NOT_FOUND) {
-  //      assertEquals(response.getBody(),actual);
-  //    }
-  //
-  //  }
+  @Test
+  public void test_get_bed_of_patient_for_null_patientid() throws Exception{
+    final PatientRestController prc =  new PatientRestController();
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
+
+    final int response = prc.getBedOfPatient(null);
+
+    assertTrue(response<0);
+
+
+  }
+
+  @Test
+  public void test_get_bed_of_patient_if_patient_doesnot_exist() throws Exception{
+    final PatientRestController prc =  new PatientRestController();
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    prc.setPs(service);
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
+
+    Mockito.when(service.findPatientById("A2346")).thenReturn(null);
+
+    final int response = prc.getBedOfPatient("A2346");
+    assertTrue(response<0);
+
+  }
+
+  @Test
+  public void test_get_bed_of_patient_if_patient_exist() throws Exception{
+    final PatientRestController prc =  new PatientRestController();
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    prc.setPs(service);
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
+
+    Mockito.when(service.findPatientById("A2345")).thenReturn(p1);
+    Mockito.when(service.findBedOfPatient("A2345")).thenReturn(1);
+
+    final int response = prc.getBedOfPatient("A2345");
+    assertTrue(response>0);
+
+
+
+  }
+
+
+
 
 }

@@ -21,4 +21,10 @@ public interface IcuDAO {
   List<Icu> findVacantBeds();
 
   List<Icu> findOccupiedBeds();
+
+  int getOccupancy(int bedid);
+
+  long getCountOfBeds();
+
+  void deleteBedById(int bedid);
 }

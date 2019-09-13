@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.philips.casestudy2.springalertingsystem.domain.Patient;
 import com.philips.casestudy2.springalertingsystem.service.PatientIdSimulatorService;
 import com.philips.casestudy2.springalertingsystem.service.PatientService;
 @RestController
+@RequestMapping("/hospital")
 public class PatientRestController {
-
 
   PatientService ps;
 
@@ -29,9 +30,7 @@ public class PatientRestController {
   }
 
 
-
-
-  @GetMapping(value="/api/patientExistsOrNot/{adhaarno}")
+  @GetMapping(value="/patient/existsornot/{adhaarno}")
   public ResponseEntity<String> checkPatientExistence(@PathVariable("adhaarno")String adhaarno) {
     String message = null;
     boolean flag = false;
@@ -60,55 +59,55 @@ public class PatientRestController {
   }
 
 
-  @PostMapping(value="/api/addpatient")
+  @PostMapping(value="/patient")
   public ResponseEntity<String> addingPatient(@RequestBody Patient patient) {
-    String message;
-    try {
-
-      final com.philips.casestudy2.springalertingsystem.service.PatientIdSimulatorService pi = new PatientIdSimulatorService();
-      final String patientId = pi.patientIdGenerator();
-      patient.setId(patientId);
+    String message=null;
 
 
-      final int bedId = patient.getIcu().getBedid();
-      final String addedPatientId = ps.addNewPatient(bedId, patient);
+    final com.philips.casestudy2.springalertingsystem.service.PatientIdSimulatorService pi = new PatientIdSimulatorService();
+    final String patientId = pi.patientIdGenerator();
+    patient.setId(patientId);
 
 
-      if(addedPatientId==null)
-      {
-        message = "Patient cannot be created!!!";
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
-      }
-      else if(addedPatientId.equals("1"))
-      {
-        message = "Patient already exists!!!";
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
-      }
-      else if(addedPatientId.equals("0")) {
+    final int bedId = patient.getIcu().getBedid();
+    final String addedPatientId = ps.addNewPatient(bedId, patient);
 
-        message = "Bed already occupied!!!";
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
-      }
-      else
-      {
-        message="Patient successfully created!!!";
-        return new ResponseEntity<>(message,HttpStatus.OK);
-      }
-    }catch (final IllegalArgumentException e) {
-      message = "Illegal Arguments";
-      return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+
+    if(addedPatientId !=null && !"1".equals(addedPatientId) && !"0".equals(addedPatientId)) {
+      message="Patient successfully created!!!";
+      return new ResponseEntity<>(message,HttpStatus.OK);
     }
+
+    if(addedPatientId==null)
+    {
+      message = "Patient cannot be null!!!";
+
+    }
+    else if(addedPatientId.equals("1"))
+    {
+      message = "Patient already exists!!!";
+
+    }
+    else if(addedPatientId.equals("0")) {
+
+      message = "Bed already occupied!!!";
+
+    }
+
+    return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+
+
 
   }
 
-  @GetMapping(value="/api/getAllPatients")
+  @GetMapping(value="/patient")
   public ResponseEntity<List<Patient>> getAllPatients(){
     final List<Patient> listOfPatients =  ps.getAllPatients();
     return new ResponseEntity<>(listOfPatients,HttpStatus.OK);
   }
 
 
-  @GetMapping(value="/api/findById/{id}")
+  @GetMapping(value="/patient/{id}")
   public ResponseEntity<Patient> getPatientById(@PathVariable("id")String id){
     final Patient p = ps.findPatientById(id);
     if(p!=null) {
@@ -119,7 +118,7 @@ public class PatientRestController {
   }
 
 
-  @DeleteMapping(value="/api/dischargePatient/{id}")
+  @DeleteMapping(value="/patient/{id}")
   public ResponseEntity<String> dischargePatient(@PathVariable("id")String id){
     String message=null;
 
@@ -135,12 +134,19 @@ public class PatientRestController {
   }
 
 
-  @GetMapping(value="/api/findBedOfPatient/{id}")
+  @GetMapping(value="/bedOfPatient/{id}")
   public int getBedOfPatient(@PathVariable("id")String id){
     if(id!=null) {
-      return ps.findBedOfPatient(id);} else {
-        return 0;
+      final Patient p = ps.findPatientById(id);
+      if(p!=null) {
+        return  ps.findBedOfPatient(id);
+      } else {
+        return -1;
       }
+    } else {
+      return -1;
+    }
+
 
   }
 }

@@ -14,9 +14,16 @@ public class IcuServiceImpl implements IcuService {
 
   IcuDAO ida;
 
+
   @Autowired
   public void setIda(IcuDAO ida) {
     this.ida = ida;
+  }
+
+
+  @Override
+  public long getCountOfBeds() {
+    return ida.getCountOfBeds();
   }
 
 
@@ -39,11 +46,30 @@ public class IcuServiceImpl implements IcuService {
     return ida.findById(bedid);
   }
 
+  @Override
+  public int getOccupancy(int bedid) {
+    final Icu bed = ida.findById(bedid);
+    if(bed!=null) {
+      return ida.getOccupancy(bedid);} else {
+        return 0;
+      }
+  }
+
 
   @Override
   public Patient findPatientByBedId(int bedid) {
-    return ida.findPatientByBedId(bedid);
+    final Icu bed = ida.findById(bedid);
+    if(bed!=null) {
+      final int occupancy=bed.getOccupancy();
+      if(occupancy==1) {
+        return ida.findPatientByBedId(bedid);} else {
+          return null;
+        }
+    } else {
+      return null;
+    }
   }
+
 
 
   @Override
@@ -56,5 +82,17 @@ public class IcuServiceImpl implements IcuService {
   public List<Icu> findOccupiedBeds() {
     return ida.findOccupiedBeds();
   }
+
+
+  @Override
+  public void deleteById(int bedid) {
+    ida.deleteBedById(bedid);
+
+  }
+
+
+
+
+
 
 }

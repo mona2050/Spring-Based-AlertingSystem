@@ -31,6 +31,7 @@ public class PatientMonitorSimulatorServiceImpl implements PatientMonitorSimulat
       return arr;
     } else {
       return null;
+
     }
   }
 

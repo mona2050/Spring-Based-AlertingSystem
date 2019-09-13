@@ -21,4 +21,10 @@ public interface IcuService {
   List<Icu> findVacantBeds();
 
   List<Icu> findOccupiedBeds();
+
+  int getOccupancy(int bedid);
+
+  long getCountOfBeds();
+
+  void deleteById(int bedid);
 }

@@ -10,10 +10,14 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.philips.casestudy2.springalertingsystem.domain.Gender;
+import com.philips.casestudy2.springalertingsystem.domain.Icu;
+import com.philips.casestudy2.springalertingsystem.domain.Patient;
 import com.philips.casestudy2.springalertingsystem.domain.PatientVitals;
 import com.philips.casestudy2.springalertingsystem.service.AlertRaisingServiceImpl;
 import com.philips.casestudy2.springalertingsystem.service.AlertRaisingServiceImpl.Result;
 import com.philips.casestudy2.springalertingsystem.service.PatientMonitorSimulatorServiceImpl;
+import com.philips.casestudy2.springalertingsystem.service.PatientServiceImpl;
 import com.philips.casestudy2.springalertingsystem.service.VitalCheckServiceImpl;
 import com.philips.casestudy2.springalertingsystem.service.VitalValidationServiceForErrorsImpl;
 import com.philips.casestudy2.springalertingsystem.web.rest.MonitoringController;
@@ -21,13 +25,48 @@ import com.philips.casestudy2.springalertingsystem.web.rest.MonitoringController
 public class TestMonitoringController {
 
   @Test
+  public void test_monitoring_controller_when_patientId_is_null() throws Exception{
+    final MonitoringController cc=new MonitoringController();
+    final ResponseEntity<List<String>> result = cc.startPatientMonitoring(null);
+    if(result.getStatusCode()==HttpStatus.BAD_REQUEST) {
+      assertEquals(null, result.getBody());
+    }
+  }
+
+  @Test
+  public void test_monitoring_controller_when_patient_is_not_present() throws Exception{
+    final MonitoringController cc=new MonitoringController();
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    cc.setService(service);
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
+
+    Mockito.when(service.findPatientById("A2346")).thenReturn(null);
+
+    final ResponseEntity<List<String>> result = cc.startPatientMonitoring("A2346");
+    if(result.getStatusCode()==HttpStatus.BAD_REQUEST) {
+      assertEquals(null, result.getBody());
+    }
+
+  }
+  @Test
   public void test_monitoring_controller_when_sample_is_null() throws Exception {
     final PatientMonitorSimulatorServiceImpl ps = Mockito.mock(PatientMonitorSimulatorServiceImpl.class);
     final MonitoringController cc=new MonitoringController();
     cc.setPatientSimulatorService(ps);
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    cc.setService(service);
 
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
 
     final PatientVitals[] sample = null;
+    Mockito.when(service.findPatientById("A2345")).thenReturn(p1);
 
     Mockito.when(ps.getDetails("A2345")).thenReturn(sample);
     final ResponseEntity<List<String>> res=cc.startPatientMonitoring("A2345");
@@ -43,6 +82,14 @@ public class TestMonitoringController {
     final VitalValidationServiceForErrorsImpl vs = Mockito.mock(VitalValidationServiceForErrorsImpl.class);
     final MonitoringController cc=new MonitoringController();
     cc.setVitalValidationService(vs);
+
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    cc.setService(service);
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
 
     final AlertRaisingServiceImpl as = Mockito.mock(AlertRaisingServiceImpl.class);
     cc.setAlertRaisingService(as);
@@ -65,7 +112,7 @@ public class TestMonitoringController {
     listOfVitals.add(cause);
     listOfVitals.add(result.toString());
 
-
+    Mockito.when(service.findPatientById("A2345")).thenReturn(p1);
     Mockito.when(vs.validateVitalsData(sample)).thenReturn(cause);
     Mockito.when(as.alertingFunc(1)).thenReturn(result);
     Mockito.when(ps.getDetails("A2345")).thenReturn(sample);
@@ -84,6 +131,13 @@ public class TestMonitoringController {
     final VitalValidationServiceForErrorsImpl vs = Mockito.mock(VitalValidationServiceForErrorsImpl.class);
     final MonitoringController cc=new MonitoringController();
     cc.setVitalValidationService(vs);
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    cc.setService(service);
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
 
     final AlertRaisingServiceImpl as = Mockito.mock(AlertRaisingServiceImpl.class);
     cc.setAlertRaisingService(as);
@@ -112,7 +166,7 @@ public class TestMonitoringController {
     listOfVitals.addAll(causes);
     listOfVitals.add(result.toString());
 
-
+    Mockito.when(service.findPatientById("A2345")).thenReturn(p1);
     Mockito.when(vs.validateVitalsData(sample)).thenReturn(null);
     Mockito.when(as.alertingFunc(1)).thenReturn(result);
     Mockito.when(ps.getDetails("A2345")).thenReturn(sample);
@@ -131,6 +185,13 @@ public class TestMonitoringController {
     final VitalValidationServiceForErrorsImpl vs = Mockito.mock(VitalValidationServiceForErrorsImpl.class);
     final MonitoringController cc=new MonitoringController();
     cc.setVitalValidationService(vs);
+    final PatientServiceImpl service = Mockito.mock(PatientServiceImpl.class);
+    cc.setService(service);
+
+    final Icu i1 = new Icu(0);
+    i1.setBedid(1);
+    final Patient p1= new Patient("harshitha",Gender.FEMALE,"6301340004","1234567891",i1);
+    p1.setId("A2345");
 
     final AlertRaisingServiceImpl as = Mockito.mock(AlertRaisingServiceImpl.class);
     cc.setAlertRaisingService(as);
@@ -145,7 +206,7 @@ public class TestMonitoringController {
 
 
     final List<String> listOfVitals=new ArrayList<>();
-    final List<String> causes=new ArrayList<>();
+
     for (final PatientVitals element : sample) {
       listOfVitals.add("PatientId="+element.patientId);
       listOfVitals.add("OxygenLevel="+element.oxygenLevel);
@@ -156,7 +217,7 @@ public class TestMonitoringController {
     final Result result = Result.NOALERT;
     listOfVitals.add(result.toString());
 
-
+    Mockito.when(service.findPatientById("A2345")).thenReturn(p1);
     Mockito.when(ps.getDetails("A2345")).thenReturn(sample);
     Mockito.when(vs.validateVitalsData(sample)).thenReturn(null);
     Mockito.when(as.alertingFunc(0)).thenReturn(result);
@@ -169,6 +230,7 @@ public class TestMonitoringController {
       assertEquals(res.getBody(), listOfVitals);
     }
   }
+
 
 
 

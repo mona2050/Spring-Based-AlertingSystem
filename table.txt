@@ -1,2 +1,12 @@
-use db;
-create table xyz(a number(6), b varchar2(20));
+database - alerting_system
+
+CREATE TABLE `patient`(
+    `id` varchar(10) NOT NULL,
+    `name` varchar(30) NOT NULL,
+    `gender` varchar(10) NOT NULL,
+    `contact` varchar(10) NOT NULL,
+    `bedid` int(10) UNIQUE NOT NULL,
+    `adhaarno` varchar(10) UNIQUE NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(bedid) REFERENCES icu(bedid)
+    )ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT  CHARSET=latin1;

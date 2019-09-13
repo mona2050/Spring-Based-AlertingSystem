@@ -3,75 +3,108 @@
  */
 package com.philips.casestudy2.springalertingsystem.web.rest;
 
-import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.philips.casestudy2.springalertingsystem.domain.Icu;
 import com.philips.casestudy2.springalertingsystem.domain.Patient;
 import com.philips.casestudy2.springalertingsystem.service.IcuService;
 
 @RestController
+@RequestMapping("/hospital")
 public class IcuRestController {
 
   IcuService is;
 
   @Autowired
+
   public void setIs(IcuService is) {
     this.is = is;
   }
 
-  @PostMapping(value="/api/addbed")
-  public ResponseEntity<Icu> addingBed(@RequestBody Icu bed) {
-
-    try {
-      final int id = is.addNewBed(bed);
-      final HttpHeaders headers = new HttpHeaders();
-      headers.setLocation(URI.create("/api/addbed/"+id));
-
-      return new ResponseEntity<>(headers,HttpStatus.CREATED);
-    }catch(final IllegalArgumentException e) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
+  @GetMapping(value="/countOfBeds")
+  public long getCountOfBeds() {
+    return is.getCountOfBeds();
   }
 
-  @GetMapping(value = "/api/findallbed")
+
+
+  @PostMapping(value="/bed")
+  public ResponseEntity<String> addBed(@RequestBody Icu bed) {
+    String message=null;
+    final long num = is.getCountOfBeds();
+    if(num<10) {
+      final int id = is.addNewBed(bed);
+      if(id>0) {
+        message="Bed successfully created!!!";
+
+      }
+      return new ResponseEntity<>(message,HttpStatus.CREATED);
+    }
+    else
+    {
+      message="No more beds can be allocated!!!";
+      return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+    }
+  }
+
+
+  @GetMapping(value = "/bed")
   public List<Icu> getAllBed(){
     return is.findAll();
   }
 
 
-  @GetMapping(value = "/api/getBedById/{bedid}")
+  @GetMapping(value = "/bed/{bedid}")
   public ResponseEntity<Icu> getById(@PathVariable("bedid") int bedid){
-    final Icu res= is.findBedById(bedid);
-    if(res!=null) {
-      return new ResponseEntity<>(res,HttpStatus.OK);
+    Icu res;
+    if(bedid>0) {
+      res= is.findBedById(bedid);
+      if(res!=null) {
+        return new ResponseEntity<>(res,HttpStatus.OK);
+      }
+      else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
     }
-    else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    else
+    {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
   }
 
-  @GetMapping(value = "/api/getPatientByBedId/{bedid}")
+  @GetMapping(value = "/patientByBedId/{bedid}")
   public ResponseEntity<Patient> getPatientByBedId(@PathVariable("bedid") int bedid){
-    final Patient res= is.findPatientByBedId(bedid);
-    if(res!=null) {
-      return new ResponseEntity<>(res,HttpStatus.OK);
+    Patient res;
+    if(bedid>0) {
+      final Icu output= is.findBedById(bedid);
+      if(output!=null) {
+        res= is.findPatientByBedId(bedid);
+        if(res!=null) {
+          return new ResponseEntity<>(res,HttpStatus.OK);
+        }
+        else {
+          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+      } else {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
     }
-    else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    else
+    {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
   }
 
-  @GetMapping(value = "/api/getVacantBeds")
+  @GetMapping(value = "/vacantBeds")
   public ResponseEntity<List<Icu>> getVacantBeds(){
     final List<Icu> res= is.findVacantBeds();
     if(res!=null) {
@@ -82,7 +115,7 @@ public class IcuRestController {
     }
   }
 
-  @GetMapping(value = "/api/getOccupiedBeds")
+  @GetMapping(value = "/occupiedBeds")
   public ResponseEntity<List<Icu>> getOccupiedBeds(){
     final List<Icu> res= is.findOccupiedBeds();
     if(res!=null) {
@@ -91,5 +124,28 @@ public class IcuRestController {
     else {
       return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
     }
+  }
+
+  @DeleteMapping(value="/bed/{bedid}")
+  public ResponseEntity<String> deleteBed(@PathVariable("bedid") int bedid) {
+    String message=null;
+    if(bedid>0) {
+      final Icu bed = is.findBedById(bedid);
+      if(bed!=null) {
+        is.deleteById(bedid);
+        message="Successfull Deletion";
+        return new ResponseEntity<>(message,HttpStatus.OK);
+      }
+      else {
+        message="Bed not found";
+        return new ResponseEntity<>(message,HttpStatus.NOT_FOUND);
+      }
+
+    }
+    else {
+      message = "Invalid bedid!!!";
+      return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+    }
+
   }
 }

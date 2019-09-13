@@ -15,8 +15,16 @@ import com.philips.casestudy2.springalertingsystem.domain.Patient;
 @Repository
 public class IcuDAOImpl implements IcuDAO {
 
+
   @PersistenceContext
+
+
   EntityManager em;
+
+  @Override
+  public long getCountOfBeds() {
+    return (long)em.createQuery("select count(i) from Icu i").getSingleResult();
+  }
 
   @Override
   public Icu save(Icu bed) {
@@ -28,7 +36,9 @@ public class IcuDAOImpl implements IcuDAO {
 
   @Override
   public List<Icu> findAll() {
-    return em.createQuery("select b from Icu as b").getResultList();
+    @SuppressWarnings("unchecked")
+    final List<Icu> beds = em.createQuery("select b from Icu as b").getResultList();
+    return beds;
   }
 
   @Override
@@ -43,13 +53,35 @@ public class IcuDAOImpl implements IcuDAO {
 
   @Override
   public List<Icu> findVacantBeds() {
-    return em.createQuery("select i from Icu as i where occupancy=0").getResultList();
+    @SuppressWarnings("unchecked")
+    final List<Icu> beds = em.createQuery("select i from Icu as i where occupancy=0").getResultList();
+    return beds;
   }
 
   @Override
   public List<Icu> findOccupiedBeds() {
-    return em.createQuery("select i from Icu as i where occupancy=1").getResultList();
+    @SuppressWarnings("unchecked")
+    final List<Icu> beds = em.createQuery("select i from Icu as i where occupancy=1").getResultList();
+    return beds;
   }
+
+  @Override
+  public int getOccupancy(int bedid) {
+
+    return (int) em.createQuery("select i.occupancy from Icu as i where bedid=:bedid").setParameter("bedid", bedid).getSingleResult();
+
+  }
+
+  @Override
+  public void deleteBedById(int bedid) {
+    em.createQuery("delete from Icu i  where i.bedid=:bedid")
+    .setParameter("bedid", bedid)
+    .executeUpdate();
+  }
+
+
+
+
 }
 
 
