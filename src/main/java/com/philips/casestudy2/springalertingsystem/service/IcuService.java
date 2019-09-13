@@ -12,7 +12,7 @@ public interface IcuService {
 
   int addNewBed(Icu toBeSaved);
 
-  List<Icu> findAll();
+  List<Icu> findAllBed();
 
   Icu findBedById(int bedid);
 

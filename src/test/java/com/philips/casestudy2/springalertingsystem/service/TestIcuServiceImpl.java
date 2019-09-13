@@ -52,7 +52,7 @@ public class TestIcuServiceImpl {
     Mockito.when(mockdao.findAll()).thenReturn(beds);
     impl.setIda(mockdao);
 
-    final List<Icu> result = impl.findAll();
+    final List<Icu> result = impl.findAllBed();
     assertEquals(beds,result);
 
   }

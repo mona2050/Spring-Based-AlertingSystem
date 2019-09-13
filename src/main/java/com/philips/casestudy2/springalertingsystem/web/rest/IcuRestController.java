@@ -59,7 +59,7 @@ public class IcuRestController {
 
   @GetMapping(value = "/bed")
   public List<Icu> getAllBed(){
-    return is.findAll();
+    return is.findAllBed();
   }
 
 
@@ -107,23 +107,13 @@ public class IcuRestController {
   @GetMapping(value = "/vacantBeds")
   public ResponseEntity<List<Icu>> getVacantBeds(){
     final List<Icu> res= is.findVacantBeds();
-    if(res!=null) {
-      return new ResponseEntity<>(res,HttpStatus.OK);
-    }
-    else {
-      return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(res,HttpStatus.OK);
   }
 
   @GetMapping(value = "/occupiedBeds")
   public ResponseEntity<List<Icu>> getOccupiedBeds(){
     final List<Icu> res= is.findOccupiedBeds();
-    if(res!=null) {
-      return new ResponseEntity<>(res,HttpStatus.OK);
-    }
-    else {
-      return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(res,HttpStatus.OK);
   }
 
   @DeleteMapping(value="/bed/{bedid}")

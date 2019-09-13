@@ -36,7 +36,7 @@ public class IcuServiceImpl implements IcuService {
 
 
   @Override
-  public List<Icu> findAll() {
+  public List<Icu> findAllBed() {
     return ida.findAll();
   }
 

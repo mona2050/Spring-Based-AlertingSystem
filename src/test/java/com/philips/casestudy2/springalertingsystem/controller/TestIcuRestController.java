@@ -102,7 +102,7 @@ public class TestIcuRestController {
     beds.add(i1);
     beds.add(i2);
 
-    Mockito.when(service.findAll()).thenReturn(beds);
+    Mockito.when(service.findAllBed()).thenReturn(beds);
 
     final List<Icu> result = irc.getAllBed();
     assertEquals(beds.size(), result.size());
