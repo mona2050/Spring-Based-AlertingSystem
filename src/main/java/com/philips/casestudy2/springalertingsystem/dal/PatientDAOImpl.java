@@ -51,6 +51,7 @@ public class PatientDAOImpl implements PatientDAO {
   @Override
   public Patient findById(String id) {
     return em.find(Patient.class, id);
+
   }
 
   @Override

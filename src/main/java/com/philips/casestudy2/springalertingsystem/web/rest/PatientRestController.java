@@ -113,7 +113,7 @@ public class PatientRestController {
     if(p!=null) {
       return new ResponseEntity<>(p,HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
     }
   }
 
