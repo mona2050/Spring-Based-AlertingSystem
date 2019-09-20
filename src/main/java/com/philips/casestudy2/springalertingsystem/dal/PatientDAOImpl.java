@@ -80,12 +80,18 @@ public class PatientDAOImpl implements PatientDAO {
 
   @Override
   public Patient checkPatientExistence(String adhaarno) {
-    final Patient p = (Patient) em.createQuery("select p from Patient p where p.adhaarno=:adhaarno").setParameter("adhaarno", adhaarno).getSingleResult();
+    try {
+      final Patient p = (Patient) em.createQuery("select p from Patient p where p.adhaarno=:adhaarno").setParameter("adhaarno", adhaarno).getSingleResult();
 
-    if(p!=null) {
-      return p;
-    } else {
+      if(p!=null) {
+        return p;
+      } else {
+        return null;
+      }
+    }catch(final Exception e )
+    {
       return null;
     }
+
   }
 }
